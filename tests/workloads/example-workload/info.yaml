@@ -1,0 +1,6 @@
+Name: example-workload
+Environments:
+  - development
+  - testing
+  - acceptance
+  - production
