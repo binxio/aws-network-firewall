@@ -1,33 +1,65 @@
 import os
-import yaml
-from jsonschema import validate
 
+from aws_network_firewall.account import Account
+from landingzone_organization.schemas import load_schema, safe_load_file
+
+from aws_network_firewall.cidr_ranges import CidrRanges, CidrRange
+from aws_network_firewall.rule import Rule
+from aws_network_firewall.destination import Destination
+from aws_network_firewall.source import Source
 
 schema_path = os.path.dirname(os.path.abspath(__file__))
+EnvironmentSchema = load_schema(os.path.join(schema_path, "environment.yaml"))
 
 
-class InvalidSchemaException(Exception):
-    def __init__(self, file: str, message: str):
-        self.file = file
-        self.message = message
-        super().__init__(self.message)
+def source_resolver(entry: dict) -> Source:
+    return Source(
+        description=entry["Description"],
+        cidr=entry.get("Cidr"),
+        region=entry.get("Region"),
+    )
 
 
-def load_schema(file: str) -> dict:
-    with open(os.path.join(schema_path, file), "r") as f:
-        return yaml.safe_load(f)
+def destination_resolver(entry: dict) -> Destination:
+    return Destination(
+        description=entry["Description"],
+        protocol=entry["Protocol"],
+        port=entry["Port"],
+        endpoint=entry.get("Endpoint"),
+        region=entry.get("Region"),
+        cidr=entry.get("Cidr"),
+    )
 
 
-def safe_load_file(schema: dict, file_path: str) -> dict:
-    try:
-        with open(file_path, "r") as f:
-            data = yaml.safe_load(f)
-            validate(instance=data, schema=schema)
-    except Exception as exc:
-        raise InvalidSchemaException(file_path, str(exc))
+def rule_resolver(workload: str, entry: dict) -> Rule:
+    return Rule(
+        workload=workload,
+        name=entry["Name"],
+        description=entry["Description"],
+        sources=list(map(source_resolver, entry["Sources"])),
+        destinations=list(map(destination_resolver, entry["Destinations"])),
+    )
 
-    return data
+
+def cidr_ranges_resolver(entry: dict) -> CidrRanges:
+    ranges = []
+
+    if entry:
+        for region, cidr in entry.items():
+            ranges.append(CidrRange(region=region, value=cidr))
+
+    return CidrRanges(cidr_ranges=ranges)
 
 
-WorkloadSchema = load_schema("workload.yaml")
-EnvironmentSchema = load_schema("environment.yaml")
+def environment_resolver(path: str) -> Account:
+    data = safe_load_file(EnvironmentSchema, path)
+
+    def internal_resolver(entry: dict) -> Rule:
+        return rule_resolver(workload=data["Name"], entry=entry)
+
+    return Account(
+        name=data["Name"],
+        account_id=data["AccountId"],
+        cidr_ranges=cidr_ranges_resolver(data.get("CidrRanges", {})),
+        rules=list(map(internal_resolver, data.get("Rules", []))),
+    )

@@ -1,0 +1,58 @@
+<!-- Space: CCOE -->
+<!-- Parent: Security -->
+<!-- Parent: Workload Firewall Rules -->
+<!-- Title: {{ workload.name }} firewall rules -->
+<!-- Label: AWS -->
+<!-- Label: CCOE -->
+<!-- Label: NetworkFirewall -->
+<!-- Label: Suppression -->
+
+# {{ workload.name }} Firewall Rules
+
+{% if workload.accounts %}
+The {{ workload.name }} workload has the following accounts:
+
+**Account Name** | **Account ID**
+-----------------|---------------
+{% for account in workload.accounts %}{{ account.name }} | {{ account.account_id }}
+{% endfor %}
+{% else %}
+There are no accounts registered under the {{ workload.name }} workload.
+{% endif %}{% if workload.accounts %}{% for account in workload.accounts %}
+
+## {{ account.name }}
+{% if account.rules %}
+The {{ account.name }} has the following suppressions registered:
+
+{% for rule in account.rules %}
+
+### {{ rule.name }}
+
+{{ rule.description }}
+
+#### Sources
+
+**CIDR** | **Region** | **Description**
+---------|------------|----------------
+{% for source in rule.sources %}{{ source.cidr }} | {{ source.region }} | {{ source.description }}
+{% endfor %}
+
+#### Destinations
+
+**Endpoint** | **CIDR** | **Region** | **Protocol** | **Port** | **Description**
+-------------|----------|------------|--------------|----------|-----------------
+{% for destination in rule.destinations %}{{ destination.endpoint }} | {{ destination.cidr }} | {{ destination.region }} | {{ destination.protocol }}  | {{ destination.port }} | {% autoescape false %}{{ destination.description | replace("\n", "<br/>") }}{% endautoescape %}
+{% endfor %}
+
+#### Rules
+
+Based on the above defined sources and destination the following firewall rules are required:
+
+```
+{% for rule in account.rules %}{{rule}}
+{% endfor %}
+```
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}

@@ -22,6 +22,17 @@ def test_check() -> None:
     assert result.exit_code == 0
 
 
+def test_update_docs() -> None:
+    template_path = os.path.join(
+        os.path.dirname(__file__), "workload-firewall-rules.jinja"
+    )
+    config_path = os.path.join(os.path.dirname(__file__), "workloads")
+    runner = CliRunner()
+    result = runner.invoke(cli, ["update", "docs", template_path, config_path])
+
+    assert result.exit_code == 0
+
+
 def test_check_invalid_path() -> None:
     config_path = os.path.join(os.path.dirname(__file__), "non-existing-folder")
     runner = CliRunner()

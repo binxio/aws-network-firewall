@@ -4,12 +4,8 @@ import click
 
 
 from landingzone_organization.cli import Context
-from aws_network_firewall.schemas import (
-    safe_load_file,
-    WorkloadSchema,
-    EnvironmentSchema,
-    InvalidSchemaException,
-)
+from landingzone_organization.schemas import WorkloadSchema, InvalidSchemaException
+from aws_network_firewall.schemas import safe_load_file, EnvironmentSchema
 
 
 @click.command()

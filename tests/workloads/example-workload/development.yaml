@@ -1,2 +1,17 @@
 AccountId: '111122223333'
 Name: binxio-example-workload-development
+CidrRanges:
+  eu-west-1: 192.168.0.0/21
+  eu-central-1: 192.168.8.0/21
+Rules:
+  - Name: My Rule name
+    Description: My rule destination
+    Sources:
+      - Description: My Source
+        Region: eu-west-1
+    Destinations:
+      - Description: My destination
+        Endpoint: xebia.com
+        Region: eu-central-1
+        Protocol: TLS
+        Port: 443

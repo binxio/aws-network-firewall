@@ -27,7 +27,7 @@ build_command = "pip install poetry && poetry build"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-landingzone-organization = "^0.7.0"
+landingzone-organization = {path = "/Users/jorisconijn/workspace/github/landingzone-organization", develop = true}
 click = "^8.1.3"
 pyyaml = "^6.0"
 jinja2 = "^3.1.2"

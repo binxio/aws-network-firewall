@@ -427,16 +427,19 @@ name = "landingzone-organization"
 version = "0.7.0"
 description = ""
 optional = false
-python-versions = ">=3.9,<4.0"
-files = [
-    {file = "landingzone_organization-0.7.0-py3-none-any.whl", hash = "sha256:0f402222eeae750b33548bda4d86efa423f437ae1c2115de2ea3a22b50f879c3"},
-    {file = "landingzone_organization-0.7.0.tar.gz", hash = "sha256:9978edf7cf766b7f7b193cca25725b8d769840aa4ee6c8da166fe085cbf43036"},
-]
+python-versions = "^3.9"
+files = []
+develop = true
 
 [package.dependencies]
-boto3 = ">=1.26.83,<2.0.0"
-click = ">=8.1.3,<9.0.0"
-jsonpickle = ">=3.0.1,<4.0.0"
+boto3 = "^1.26.83"
+click = "^8.1.3"
+jsonpickle = "^3.0.1"
+jsonschema = "^4.18.3"
+
+[package.source]
+type = "directory"
+url = "../landingzone-organization"
 
 [[package]]
 name = "mando"
@@ -980,4 +983,4 @@ requests = ">=2.0,<3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "9ffe1f6d363e5c4d3abbc79ba61af14c7d9e53adca3fc7786422375df1377b04"
+content-hash = "70d9220e5ff63d08436e8c0f0852ec699b2dc5579008c3580c9f09b8754dd0ef"
