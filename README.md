@@ -4,7 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/binxio/aws-network-firewall.svg)](https://github.com/binxio/aws-securityhub-suppression/releases/)
 [![Continuous Integration](https://github.com/binxio/aws-securityhub-suppression/actions/workflows/ci.yml/badge.svg)](https://github.com/binxio/aws-network-firewall/actions/workflows/ci.yml)
 
-This tool allows you to manage your Suppression's as Code.
+This tool allows you to manage your AWS Network Firewall rules as Code.
 
 **Useful links:**
 - [Documentation](https://binxio.github.io/aws-network-firewall/)
