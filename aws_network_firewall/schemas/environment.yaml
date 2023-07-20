@@ -7,12 +7,23 @@ properties:
     type: string
   CidrRanges:
     type: object
+    additionalProperties: False
     properties:
-      us-east-1:
+      ap-northeast-1:
+        type: string
+      ap-southeast-1:
         type: string
       eu-central-1:
         type: string
       eu-west-1:
+        type: string
+      sa-east-1:
+        type: string
+      ca-central-1:
+        type: string
+      us-east-1:
+        type: string
+      us-east-2:
         type: string
   Rules:
     type: array

@@ -29,12 +29,15 @@ class Rule:
 
     @staticmethod
     def __tls_endpoint_options(endpoint: str) -> List[SuricataOption]:
-        options = [SuricataOption(name="tls.sni")]
+        options = [
+            SuricataOption(name="tls.sni"),
+            SuricataOption(name="tls.version", value="1.2,1.3"),
+        ]
 
         if endpoint.startswith("*"):
             options += [
                 SuricataOption(name="dotprefix"),
-                SuricataOption(name="content", value=endpoint[1:]),  # type: ignore
+                SuricataOption(name="content", value=endpoint[1:]),
                 SuricataOption(name="nocase"),
                 SuricataOption(name="endswith"),
             ]
@@ -74,7 +77,8 @@ class Rule:
 
     @property
     def suricata_rules(self) -> List[SuricataRule]:
-        return list(filter(None, map(self.__resolve_rule, self.destinations)))
+        rules = list(filter(None, map(self.__resolve_rule, self.destinations)))
+        return rules
 
     def __str__(self) -> str:
         return "\n".join(map(str, self.suricata_rules))
