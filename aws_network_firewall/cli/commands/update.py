@@ -3,7 +3,6 @@ import click
 from landingzone_organization.cli import Context
 from landingzone_organization.workloads import Workloads
 
-from aws_network_firewall.account import Account
 from aws_network_firewall.documentation_generator import DocumentationGenerator
 from aws_network_firewall.schemas import environment_resolver
 
@@ -28,7 +27,9 @@ def docs(ctx: Context, template_path: str, config_path: str) -> None:
     ctx.debug(f"Path: {config_path}")
     ctx.debug(f"Template: {template_path}")
 
-    workloads = Workloads(path=config_path, environment_resolver=environment_resolver)
+    workloads = Workloads.load_by_path(
+        path=config_path, environment_resolver=environment_resolver
+    )
     ctx.debug(f"\tdetected: {len(workloads.names)} workloads")
     ctx.debug(f"\tdetected: {len(workloads.accounts)} accounts")
 

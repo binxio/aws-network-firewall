@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List, Optional
 from landingzone_organization import Account as LandingZoneAccount
-from aws_network_firewall.cidr_ranges import CidrRanges, CidrRange
+from aws_network_firewall.cidr_ranges import CidrRanges
 from aws_network_firewall.rule import Rule
 
 
