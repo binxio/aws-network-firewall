@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2023-07-20)
+
+### Fix
+
+* Release to pypi ([`fdf1b0f`](https://github.com/binxio/aws-network-firewall/commit/fdf1b0fd2809aef5b33ffb646776a715d0b93452))
+
 ## v0.1.0 (2023-07-20)
 
 ### Feature
