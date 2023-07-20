@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.2 (2023-07-20)
+
+### Fix
+
+* Update README.md to reflect correct project ([`93a8a23`](https://github.com/binxio/aws-network-firewall/commit/93a8a23c0a789c59c6c0009cbc497d20b4808e30))
+
 ## v0.1.1 (2023-07-20)
 
 ### Fix
