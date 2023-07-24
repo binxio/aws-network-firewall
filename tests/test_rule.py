@@ -119,3 +119,27 @@ def test_rule_no_cidr() -> None:
     )
 
     assert "" == str(rule)
+
+
+def test_icmp_rule() -> None:
+    rule = Rule(
+        workload="my-workload",
+        name="my-rule",
+        description="My description",
+        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
+        destinations=[
+            Destination(
+                description="my destination",
+                protocol="ICMP",
+                port=None,
+                cidr="10.0.1.0/24",
+                endpoint=None,
+                region=None,
+            )
+        ],
+    )
+
+    assert (
+        'pass icmp 10.0.0.0/24 any <> 10.0.1.0/24 any (msg:"my-workload | my-rule"; rev:"1"; sid:"XXX")'
+        == str(rule)
+    )

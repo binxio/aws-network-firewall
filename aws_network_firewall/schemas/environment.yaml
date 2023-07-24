@@ -82,14 +82,13 @@ $defs:
       Region:
         type: string
       Protocol:
-        enum: [ "TCP", "TLS" ]
+        enum: [ "TCP", "TLS", "ICMP" ]
       Port:
         type: integer
     additionalProperties: False
     required:
       - Description
       - Protocol
-      - Port
     anyOf:
       - required: ["Endpoint", "Cidr"]
         not: { required: ["Region"] }
@@ -99,3 +98,4 @@ $defs:
         not: { required: ["Endpoint", "Region"] }
 #      - not: { required: ["Endpoint", "Region", "Cidr"] }
 #      - not: { required: ["Region", "Cidr"] }
+#      Port is not required when Protocol is ICMP

@@ -24,7 +24,7 @@ def destination_resolver(entry: dict) -> Destination:
     return Destination(
         description=entry["Description"],
         protocol=entry["Protocol"],
-        port=entry["Port"],
+        port=entry.get("Port"),
         endpoint=entry.get("Endpoint"),
         region=entry.get("Region"),
         cidr=entry.get("Cidr"),
