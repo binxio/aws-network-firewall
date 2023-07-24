@@ -5,6 +5,7 @@ CidrRanges:
   eu-central-1: 192.168.8.0/21
 Rules:
   - Name: My Rule name
+    Type: Egress
     Description: My rule destination
     Sources:
       - Description: My Source

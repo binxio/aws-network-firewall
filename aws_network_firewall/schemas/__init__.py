@@ -34,6 +34,7 @@ def destination_resolver(entry: dict) -> Destination:
 def rule_resolver(workload: str, entry: dict) -> Rule:
     return Rule(
         workload=workload,
+        type=entry["Type"],
         name=entry["Name"],
         description=entry["Description"],
         sources=list(map(source_resolver, entry["Sources"])),

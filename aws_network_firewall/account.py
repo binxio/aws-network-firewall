@@ -37,3 +37,11 @@ class Account(LandingZoneAccount):
     @property
     def rules(self) -> List[Rule]:
         return self.__rules
+
+    @property
+    def inspection_rules(self) -> List[Rule]:
+        return list(filter(lambda rule: rule.is_inspection_rule, self.rules))
+
+    @property
+    def egress_rules(self) -> List[Rule]:
+        return list(filter(lambda rule: rule.is_egress_rule, self.rules))

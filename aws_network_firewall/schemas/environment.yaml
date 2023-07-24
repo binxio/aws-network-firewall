@@ -40,6 +40,8 @@ $defs:
     properties:
       Name:
         type: string
+      Type:
+        enum: [ "Egress", "Inspection" ]
       Description:
         type: string
       Sources:
@@ -53,6 +55,7 @@ $defs:
     additionalProperties: False
     required:
       - Name
+      - Type
       - Description
       - Sources
       - Destinations
