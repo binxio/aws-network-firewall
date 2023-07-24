@@ -7,6 +7,7 @@ def test_rule_with_tls_endpoint() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        type=Rule.INSPECTION,
         description="My description",
         sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
         destinations=[
@@ -31,6 +32,7 @@ def test_rule_with_tls_wildcard_endpoint() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        type=Rule.INSPECTION,
         description="My description",
         sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
         destinations=[
@@ -55,6 +57,7 @@ def test_rule_with_tls_endpoint_non_standard_port() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        type=Rule.INSPECTION,
         description="My description",
         sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
         destinations=[
@@ -80,6 +83,7 @@ def test_rule_with_tcp_cidr() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        type=Rule.INSPECTION,
         description="My description",
         sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
         destinations=[
@@ -104,6 +108,7 @@ def test_rule_no_cidr() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        type=Rule.INSPECTION,
         description="My description",
         sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
         destinations=[
@@ -125,6 +130,7 @@ def test_icmp_rule() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        type=Rule.INSPECTION,
         description="My description",
         sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
         destinations=[

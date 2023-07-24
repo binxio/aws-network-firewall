@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, ClassVar
 
 from aws_network_firewall.source import Source
 from aws_network_firewall.destination import Destination
@@ -16,9 +16,21 @@ class Rule:
 
     workload: str
     name: str
+    type: str
     description: str
     sources: List[Source]
     destinations: List[Destination]
+
+    INSPECTION: ClassVar[str] = "Inspection"
+    EGRESS: ClassVar[str] = "Egress"
+
+    @property
+    def is_inspection_rule(self) -> bool:
+        return self.type == self.INSPECTION
+
+    @property
+    def is_egress_rule(self) -> bool:
+        return self.type == self.EGRESS
 
     @property
     def __suricata_source(self) -> List[SuricataHost]:
