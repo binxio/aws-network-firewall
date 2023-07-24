@@ -13,7 +13,7 @@ class Destination:
 
     description: str
     protocol: str
-    port: int
+    port: Optional[int]
     endpoint: Optional[str]
     region: Optional[str]
     cidr: Optional[str]

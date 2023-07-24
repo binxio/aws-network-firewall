@@ -23,6 +23,10 @@ class Rule:
         self.protocol = self.protocol.lower()
 
     @property
+    def direction(self) -> str:
+        return "<>" if self.protocol == "icmp" else "->"
+
+    @property
     def source(self) -> str:
         addresses = list(map(lambda host: host.address, self.sources))
         sources = ",".join(addresses)
@@ -47,4 +51,4 @@ class Rule:
 
             post_rule = f"\n{self.action} tcp {self.source} <> {self.destination} ({handshake_options})"
 
-        return f"{self.action} {self.protocol} {self.source} -> {self.destination} ({options}){post_rule}"
+        return f"{self.action} {self.protocol} {self.source} {self.direction} {self.destination} ({options}){post_rule}"
