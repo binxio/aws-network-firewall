@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.0 (2023-07-24)
+
+### Feature
+
+* Support icmp rules ([#2](https://github.com/binxio/aws-network-firewall/issues/2)) ([`aa5d16f`](https://github.com/binxio/aws-network-firewall/commit/aa5d16f895f08323cd62812b2dddee78560ec79b))
+
 ## v0.1.2 (2023-07-20)
 
 ### Fix
