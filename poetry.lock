@@ -423,6 +423,20 @@ files = [
 referencing = ">=0.28.0"
 
 [[package]]
+name = "jsonschema2md"
+version = "0.9.0"
+description = "Convert JSON Schema to human-readable Markdown documentation"
+optional = false
+python-versions = ">=3.7.2,<4.0.0"
+files = [
+    {file = "jsonschema2md-0.9.0-py3-none-any.whl", hash = "sha256:b6b7ae067c355c887949646296fb04375f6e995d862cbe7ae81a34f085a63a67"},
+    {file = "jsonschema2md-0.9.0.tar.gz", hash = "sha256:3ef34181679c48bbd1ac228ad1d6441051ceef58ba90cba6b931d0368e00ec77"},
+]
+
+[package.dependencies]
+PyYAML = ">=6.0,<7.0"
+
+[[package]]
 name = "landingzone-organization"
 version = "0.8.0"
 description = ""
@@ -981,4 +995,4 @@ requests = ">=2.0,<3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "4bd50f0f3fb305e924054f74c0fe6254dec9cf10996dd3cabbb9db91823b796d"
+content-hash = "467b80ed1acb725c0965ecbd1b422f9f1ff5e1ab678c34df08c41788dd4d4d52"

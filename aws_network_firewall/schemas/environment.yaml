@@ -1,5 +1,9 @@
 description: Schema for defining an environment
 type: object
+additionalProperties: False
+required:
+  - AccountId
+  - Name
 properties:
   AccountId:
     type: string
@@ -28,15 +32,26 @@ properties:
   Rules:
     type: array
     items:
-      $ref: "#/$defs/Rule"
-additionalProperties: False
-required:
-  - AccountId
-  - Name
+      $ref: "#/definitions/Rule"
+    examples:
+      - Name: Outbound Connectivity
+        Type: Egress
+        Description: Allow traffic to reach the outbound destinations
+        Sources:
+          - $ref: "#/definitions/Source"
+        Destinations:
+          - $ref: "#/definitions/Destination"
 
-$defs:
+definitions:
   Rule:
     type: object
+    additionalProperties: False
+    required:
+      - Name
+      - Type
+      - Description
+      - Sources
+      - Destinations
     properties:
       Name:
         type: string
@@ -47,21 +62,17 @@ $defs:
       Sources:
         type: array
         items:
-          $ref: "#/$defs/Source"
+          $ref: "#/definitions/Source"
       Destinations:
         type: array
         items:
-          $ref: "#/$defs/Destination"
-    additionalProperties: False
-    required:
-      - Name
-      - Type
-      - Description
-      - Sources
-      - Destinations
+          $ref: "#/definitions/Destination"
 
   Source:
     type: object
+    additionalProperties: False
+    required:
+      - Description
     properties:
       Description:
         type: string
@@ -69,12 +80,26 @@ $defs:
         type: string
       Region:
         type: string
-    additionalProperties: False
-    required:
-      - Description
+    examples:
+      - Description: Allow access from `10.0.0.0/8` to the defined destinations.
+        Cidr: 10.0.0.0/8
+      - Description: Allow access from `eu-central-1` to the defined destinations.
+        Region: eu-central-1
 
   Destination:
     type: object
+    additionalProperties: False
+    required:
+      - Description
+      - Protocol
+    anyOf:
+      - required: ["Endpoint"]
+        not: { required: ["Region", "Cidr"] }
+      - required: ["Cidr"]
+        not: { required: ["Endpoint", "Region"] }
+      - required: ["Region"]
+        not: { required: ["Endpoint", "Cidr"] }
+#      Port is not required when Protocol is ICMP
     properties:
       Description:
         type: string
@@ -88,17 +113,10 @@ $defs:
         enum: [ "TCP", "TLS", "ICMP" ]
       Port:
         type: integer
-    additionalProperties: False
-    required:
-      - Description
-      - Protocol
-    anyOf:
-      - required: ["Endpoint", "Cidr"]
-        not: { required: ["Region"] }
-      - required: ["Endpoint", "Region"]
-        not: { required: ["Cidr"] }
-      - required: ["Cidr"]
-        not: { required: ["Endpoint", "Region"] }
-#      - not: { required: ["Endpoint", "Region", "Cidr"] }
-#      - not: { required: ["Region", "Cidr"] }
-#      Port is not required when Protocol is ICMP
+    examples:
+      - Description: Website of Xebia
+        Protocol: TLS
+        Endpoint: xebia.com
+        Region: eu-central-1
+        Port: 443
+

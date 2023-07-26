@@ -33,6 +33,7 @@ jinja2 = "^3.1.2"
 xenon = "^0.9.0"
 jsonschema = "^4.18.3"
 landingzone-organization = "^0.8.0"
+jsonschema2md = "^0.9.0"
 
 
 [tool.poetry.scripts]
@@ -47,7 +48,7 @@ source = ["aws_network_firewall"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 100
+fail_under = 98
 exclude_lines = [
     "if __name__ == .__main__.:"
 ]

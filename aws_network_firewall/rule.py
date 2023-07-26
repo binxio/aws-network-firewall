@@ -43,7 +43,8 @@ class Rule:
     def __tls_endpoint_options(endpoint: str) -> List[SuricataOption]:
         options = [
             SuricataOption(name="tls.sni"),
-            SuricataOption(name="tls.version", value="1.2,1.3"),
+            SuricataOption(name="tls.version", value="1.2", quoted_value=False),
+            SuricataOption(name="tls.version", value="1.3", quoted_value=False),
         ]
 
         if endpoint.startswith("*"):
@@ -71,8 +72,8 @@ class Rule:
 
         return options + [
             SuricataOption(name="msg", value=f"{self.workload} | {self.name}"),
-            SuricataOption(name="rev", value="1"),
-            SuricataOption(name="sid", value="XXX"),
+            SuricataOption(name="rev", value="1", quoted_value=False),
+            SuricataOption(name="sid", value="XXX", quoted_value=False),
         ]
 
     def __resolve_rule(self, destination: Destination) -> Optional[SuricataRule]:
