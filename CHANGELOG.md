@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2023-07-26)
+
+### Feature
+
+* Support egress and inspection rule types ([#4](https://github.com/binxio/aws-network-firewall/issues/4)) ([`b32fc9b`](https://github.com/binxio/aws-network-firewall/commit/b32fc9bd7488607ad715a88b494d877715d032bc))
+
 ## v0.3.0 (2023-07-24)
 
 ### Feature
