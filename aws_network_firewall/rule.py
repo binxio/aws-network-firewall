@@ -35,7 +35,7 @@ class Rule:
     @property
     def __suricata_source(self) -> List[SuricataHost]:
         def convert_source(source: Source) -> Optional[SuricataHost]:
-            return SuricataHost(address=source.cidr) if source.cidr else None
+            return SuricataHost(address=source.cidr, port=0) if source.cidr else None
 
         return list(filter(None, map(convert_source, self.sources)))
 
@@ -76,15 +76,15 @@ class Rule:
             SuricataOption(name="sid", value="XXX", quoted_value=False),
         ]
 
-    def __resolve_rule(self, destination: Destination) -> Optional[SuricataRule]:
-        if not destination.cidr:
-            return None
-
+    def __resolve_rule(self, destination: Destination) -> SuricataRule:
         return SuricataRule(
             action="pass",
             protocol=destination.protocol,
             sources=self.__suricata_source,
-            destination=SuricataHost(address=destination.cidr, port=destination.port),
+            destination=SuricataHost(
+                address=destination.cidr if destination.cidr else "",
+                port=destination.port if destination.port else 0,
+            ),
             options=self.__resolve_options(destination),
         )
 

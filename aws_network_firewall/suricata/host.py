@@ -10,11 +10,12 @@ class Host:
     Understands a source and/or destination defenition
     """
 
-    address: str = "any"
-    port: Optional[int] = None
+    address: str
+    port: int
 
     def __post_init__(self):
         self.port = "any" if not self.port else self.port
+        self.address = "any" if not self.address else self.address
 
     def __str__(self):
         return f"{self.address} {self.port}"

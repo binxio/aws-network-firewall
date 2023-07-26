@@ -104,28 +104,6 @@ def test_rule_with_tcp_cidr() -> None:
     )
 
 
-def test_rule_no_cidr() -> None:
-    rule = Rule(
-        workload="my-workload",
-        name="my-rule",
-        type=Rule.INSPECTION,
-        description="My description",
-        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
-        destinations=[
-            Destination(
-                description="my destination",
-                protocol="TCP",
-                port=443,
-                cidr=None,
-                endpoint=None,
-                region=None,
-            )
-        ],
-    )
-
-    assert "" == str(rule)
-
-
 def test_icmp_rule() -> None:
     rule = Rule(
         workload="my-workload",
@@ -147,5 +125,30 @@ def test_icmp_rule() -> None:
 
     assert (
         'pass icmp 10.0.0.0/24 any <> 10.0.1.0/24 any (msg: "my-workload | my-rule"; rev: 1; sid: XXX;)'
+        == str(rule)
+    )
+
+
+def test_egress_tls_rule() -> None:
+    rule = Rule(
+        workload="my-workload",
+        name="my-rule",
+        type=Rule.EGRESS,
+        description="My description",
+        sources=[Source(description="my source", cidr=None, region="eu-west-1")],
+        destinations=[
+            Destination(
+                description="my destination",
+                protocol="TLS",
+                port=443,
+                cidr=None,
+                endpoint="xebia.com",
+                region=None,
+            )
+        ],
+    )
+
+    assert (
+        'pass tls  any -> any 443 (tls.sni; tls.version: 1.2; tls.version: 1.3; content: "xebia.com"; nocase; startswith; endswith; msg: "my-workload | my-rule"; rev: 1; sid: XXX;)'
         == str(rule)
     )
