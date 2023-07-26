@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.1 (2023-07-26)
+
+### Fix
+
+* Missing egress rules ([#5](https://github.com/binxio/aws-network-firewall/issues/5)) ([`6242cf4`](https://github.com/binxio/aws-network-firewall/commit/6242cf4988f007d29491c4295ded76c92b01c419))
+
 ## v0.4.0 (2023-07-26)
 
 ### Feature
