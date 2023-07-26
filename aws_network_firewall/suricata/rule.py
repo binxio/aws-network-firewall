@@ -44,11 +44,12 @@ class Rule:
             message.value = (
                 f"{message.value} | Pass non-established TCP for 3-way handshake"
             )
-            flow = Option(name="flow", value="not_established")
-            sid = Option(name="sid", value="XXX")
-            rev = Option(name="rev", value="1")
+            flow = Option(name="flow", value="not_established")  # No quotes
+            sid = Option(name="sid", value="XXX", quoted_value=False)
+            rev = Option(name="rev", value="1", quoted_value=False)
+
             handshake_options = "; ".join(list(map(str, [message, flow, rev, sid])))
 
-            post_rule = f"\n{self.action} tcp {self.source} <> {self.destination} ({handshake_options})"
+            post_rule = f"\n{self.action} tcp {self.source} <> {self.destination} ({handshake_options};)"
 
-        return f"{self.action} {self.protocol} {self.source} {self.direction} {self.destination} ({options}){post_rule}"
+        return f"{self.action} {self.protocol} {self.source} {self.direction} {self.destination} ({options};){post_rule}"
