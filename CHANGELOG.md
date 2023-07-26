@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2023-07-24)
+
+### Feature
+
+* Support rule types ([#3](https://github.com/binxio/aws-network-firewall/issues/3)) ([`af013d5`](https://github.com/binxio/aws-network-firewall/commit/af013d5e70511c8e4fc8bcbff78260e8e35d42b5))
+
 ## v0.2.0 (2023-07-24)
 
 ### Feature
