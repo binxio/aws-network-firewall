@@ -28,6 +28,7 @@ def destination_resolver(entry: dict) -> Destination:
         endpoint=entry.get("Endpoint"),
         region=entry.get("Region"),
         cidr=entry.get("Cidr"),
+        message=entry.get("Message"),
     )
 
 

@@ -20,4 +20,4 @@ class Option:
         if self.quoted_value:
             value = f'"{self.value}"'
 
-        return self.name if not self.value else f"{self.name}: {value}"
+        return self.name if not self.value else f"{self.name}:{value}"

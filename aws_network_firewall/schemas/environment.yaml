@@ -113,6 +113,8 @@ definitions:
         enum: [ "TCP", "TLS", "ICMP" ]
       Port:
         type: integer
+      Message:
+        type: string
     examples:
       - Description: Website of Xebia
         Protocol: TLS
