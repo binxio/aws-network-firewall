@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.2 (2023-07-28)
+
+### Fix
+
+* Tls versions cannot be combined in a single rule ([#6](https://github.com/binxio/aws-network-firewall/issues/6)) ([`c1294a9`](https://github.com/binxio/aws-network-firewall/commit/c1294a9329043da3145eee0bdd5967c12954ccbd))
+
 ## v0.4.1 (2023-07-26)
 
 ### Fix
