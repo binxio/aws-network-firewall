@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aws-network-firewall"
-version = "0.5.0"
+version = "0.6.0"
 description = ""
 authors = ["Joris Conijn <Joris.Conijn@xebia.com>"]
 license = "MIT"
