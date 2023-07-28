@@ -17,6 +17,7 @@ class Destination:
     endpoint: Optional[str]
     region: Optional[str]
     cidr: Optional[str]
+    message: Optional[str]
 
     def resolve_region_cidr_ranges(self, ranges: CidrRanges) -> None:
         if self.region and not self.cidr:

@@ -72,8 +72,14 @@ class Rule:
         if destination.protocol == "TLS" and destination.endpoint:
             options = self.__tls_endpoint_options(destination.endpoint)
 
+        message = (
+            f"{destination.message} | {self.workload} | {self.name}"
+            if destination.message
+            else f"{self.workload} | {self.name}"
+        )
+
         return options + [
-            SuricataOption(name="msg", value=f"{self.workload} | {self.name}"),
+            SuricataOption(name="msg", value=message),
             SuricataOption(name="rev", value="1", quoted_value=False),
             SuricataOption(name="sid", value="XXX", quoted_value=False),
         ]

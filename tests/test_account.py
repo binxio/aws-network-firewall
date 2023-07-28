@@ -21,6 +21,7 @@ def generate_rule(type: str) -> Rule:
                 cidr=None,
                 endpoint=None,
                 region=None,
+                message=None,
             )
         ],
     )
