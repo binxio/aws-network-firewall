@@ -32,16 +32,16 @@ The {{ account.name }} has the following suppressions registered:
 
 #### Sources
 
-**CIDR** | **Region** | **Description**
----------|------------|----------------
-{% for source in rule.sources %}{{ source.cidr }} | {{ source.region }} | {{ source.description }}
+**CIDR** | **Description**
+---------|----------------
+{% for source in rule.sources %}{{ source.cidr }} | {{ source.description }}
 {% endfor %}
 
 #### Destinations
 
-**Endpoint** | **CIDR** | **Region** | **Protocol** | **Port** | **Description**
--------------|----------|------------|--------------|----------|-----------------
-{% for destination in rule.destinations %}{{ destination.endpoint }} | {{ destination.cidr }} | {{ destination.region }} | {{ destination.protocol }}  | {{ destination.port }} | {% autoescape false %}{{ destination.description | replace("\n", "<br/>") }}{% endautoescape %}
+**Endpoint** | **CIDR** | **Protocol** | **Port** | **Description**
+-------------|----------|--------------|----------|-----------------
+{% for destination in rule.destinations %}{{ destination.endpoint }} | {{ destination.cidr }} | {{ destination.protocol }}  | {{ destination.port }} | {% autoescape false %}{{ destination.description | replace("\n", "<br/>") }}{% endautoescape %}
 {% endfor %}
 
 #### Rules

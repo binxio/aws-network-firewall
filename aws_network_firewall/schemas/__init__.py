@@ -16,7 +16,6 @@ def source_resolver(entry: dict) -> Source:
     return Source(
         description=entry["Description"],
         cidr=entry.get("Cidr"),
-        region=entry.get("Region"),
     )
 
 
@@ -26,7 +25,6 @@ def destination_resolver(entry: dict) -> Destination:
         protocol=entry["Protocol"],
         port=entry.get("Port"),
         endpoint=entry.get("Endpoint"),
-        region=entry.get("Region"),
         cidr=entry.get("Cidr"),
         message=entry.get("Message"),
     )
@@ -36,6 +34,7 @@ def rule_resolver(workload: str, entry: dict) -> Rule:
     return Rule(
         workload=workload,
         type=entry["Type"],
+        region=entry["Region"],
         name=entry["Name"],
         description=entry["Description"],
         sources=list(map(source_resolver, entry["Sources"])),

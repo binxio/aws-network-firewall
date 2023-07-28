@@ -17,6 +17,7 @@ class Rule:
     workload: str
     name: str
     type: str
+    region: str
     description: str
     sources: List[Source]
     destinations: List[Destination]

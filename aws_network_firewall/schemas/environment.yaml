@@ -49,6 +49,7 @@ definitions:
     required:
       - Name
       - Type
+      - Region
       - Description
       - Sources
       - Destinations
@@ -58,6 +59,8 @@ definitions:
       Type:
         enum: [ "Egress", "Inspection" ]
       Description:
+        type: string
+      Region:
         type: string
       Sources:
         type: array
@@ -78,8 +81,6 @@ definitions:
         type: string
       Cidr:
         type: string
-      Region:
-        type: string
     examples:
       - Description: Allow access from `10.0.0.0/8` to the defined destinations.
         Cidr: 10.0.0.0/8
@@ -93,12 +94,11 @@ definitions:
       - Description
       - Protocol
     anyOf:
+      - required: ["Endpoint", "Cidr"]
       - required: ["Endpoint"]
-        not: { required: ["Region", "Cidr"] }
+        not: { required: ["Cidr"] }
       - required: ["Cidr"]
-        not: { required: ["Endpoint", "Region"] }
-      - required: ["Region"]
-        not: { required: ["Endpoint", "Cidr"] }
+        not: { required: ["Endpoint"] }
 #      Port is not required when Protocol is ICMP
     properties:
       Description:

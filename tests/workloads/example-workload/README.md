@@ -33,16 +33,16 @@ My rule destination
 
 #### Sources
 
-**CIDR** | **Region** | **Description**
----------|------------|----------------
-192.168.0.0/21 | eu-west-1 | My Source
+**CIDR** | **Description**
+---------|----------------
+192.168.0.0/21 | My Source
 
 
 #### Destinations
 
-**Endpoint** | **CIDR** | **Region** | **Protocol** | **Port** | **Description**
--------------|----------|------------|--------------|----------|-----------------
-xebia.com | 192.168.8.0/21 | eu-central-1 | TLS  | 443 | My destination
+**Endpoint** | **CIDR** | **Protocol** | **Port** | **Description**
+-------------|----------|--------------|----------|-----------------
+xebia.com | None | TLS  | 443 | My destination
 
 
 #### Rules
@@ -50,7 +50,7 @@ xebia.com | 192.168.8.0/21 | eu-central-1 | TLS  | 443 | My destination
 Based on the above defined sources and destination the following firewall rules are required:
 
 ```
-pass tls 192.168.0.0/21 any -> 192.168.8.0/21 443 (tls.sni; tls.version:1.2; content:"xebia.com"; nocase; startswith; endswith; msg:"binxio-example-workload-development | My Rule name"; rev:1; sid:XXX;)
+pass tls 192.168.0.0/21 any -> any 443 (tls.sni; tls.version:1.2; content:"xebia.com"; nocase; startswith; endswith; msg:"binxio-example-workload-development | My Rule name"; rev:1; sid:XXX;)
 
 ```
 
