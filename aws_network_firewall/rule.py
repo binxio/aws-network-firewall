@@ -44,7 +44,9 @@ class Rule:
         options = [
             SuricataOption(name="tls.sni"),
             SuricataOption(name="tls.version", value="1.2", quoted_value=False),
-            SuricataOption(name="tls.version", value="1.3", quoted_value=False),
+            # When using multiple tls versions you need 2 rules
+            # openssl 1.1.1 is needed for tls1.3
+            # SuricataOption(name="tls.version", value="1.3", quoted_value=False),
         ]
 
         if endpoint.startswith("*"):
