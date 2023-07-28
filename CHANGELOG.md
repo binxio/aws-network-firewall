@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2023-07-28)
+
+### Feature
+
+* Support custom messages ([#7](https://github.com/binxio/aws-network-firewall/issues/7)) ([`e946b2b`](https://github.com/binxio/aws-network-firewall/commit/e946b2b9853310587c7d05e85ea9a40de90f720f))
+
 ## v0.4.2 (2023-07-28)
 
 ### Fix
