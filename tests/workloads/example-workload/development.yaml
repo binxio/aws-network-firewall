@@ -6,13 +6,12 @@ CidrRanges:
 Rules:
   - Name: My Rule name
     Type: Egress
+    Region: eu-west-1
     Description: My rule destination
     Sources:
       - Description: My Source
-        Region: eu-west-1
     Destinations:
       - Description: My destination
         Endpoint: xebia.com
-        Region: eu-central-1
         Protocol: TLS
         Port: 443

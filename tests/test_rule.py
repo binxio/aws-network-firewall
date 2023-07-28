@@ -7,9 +7,10 @@ def test_rule_with_tls_endpoint() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.INSPECTION,
         description="My description",
-        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
+        sources=[Source(description="my source", cidr="10.0.0.0/24")],
         destinations=[
             Destination(
                 description="my destination",
@@ -17,7 +18,6 @@ def test_rule_with_tls_endpoint() -> None:
                 port=443,
                 endpoint="xebia.com",
                 cidr="10.0.1.0/24",
-                region=None,
                 message=None,
             )
         ],
@@ -33,9 +33,10 @@ def test_rule_with_tls_wildcard_endpoint() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.INSPECTION,
         description="My description",
-        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
+        sources=[Source(description="my source", cidr="10.0.0.0/24")],
         destinations=[
             Destination(
                 description="my destination",
@@ -43,7 +44,6 @@ def test_rule_with_tls_wildcard_endpoint() -> None:
                 port=443,
                 endpoint="*.xebia.com",
                 cidr="10.0.1.0/24",
-                region=None,
                 message=None,
             )
         ],
@@ -59,9 +59,10 @@ def test_rule_with_tls_endpoint_non_standard_port() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.INSPECTION,
         description="My description",
-        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
+        sources=[Source(description="my source", cidr="10.0.0.0/24")],
         destinations=[
             Destination(
                 description="my destination",
@@ -69,7 +70,6 @@ def test_rule_with_tls_endpoint_non_standard_port() -> None:
                 port=444,
                 endpoint="xebia.com",
                 cidr="10.0.1.0/24",
-                region=None,
                 message=None,
             )
         ],
@@ -86,9 +86,10 @@ def test_rule_with_tcp_cidr() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.INSPECTION,
         description="My description",
-        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
+        sources=[Source(description="my source", cidr="10.0.0.0/24")],
         destinations=[
             Destination(
                 description="my destination",
@@ -96,7 +97,6 @@ def test_rule_with_tcp_cidr() -> None:
                 port=443,
                 cidr="10.0.1.0/24",
                 endpoint=None,
-                region=None,
                 message=None,
             )
         ],
@@ -112,9 +112,10 @@ def test_icmp_rule() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.INSPECTION,
         description="My description",
-        sources=[Source(description="my source", cidr="10.0.0.0/24", region=None)],
+        sources=[Source(description="my source", cidr="10.0.0.0/24")],
         destinations=[
             Destination(
                 description="my destination",
@@ -122,7 +123,6 @@ def test_icmp_rule() -> None:
                 port=None,
                 cidr="10.0.1.0/24",
                 endpoint=None,
-                region=None,
                 message=None,
             )
         ],
@@ -138,9 +138,10 @@ def test_egress_tls_rule() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.EGRESS,
         description="My description",
-        sources=[Source(description="my source", cidr=None, region="eu-west-1")],
+        sources=[Source(description="my source", cidr=None)],
         destinations=[
             Destination(
                 description="my destination",
@@ -148,7 +149,6 @@ def test_egress_tls_rule() -> None:
                 port=443,
                 cidr=None,
                 endpoint="xebia.com",
-                region=None,
                 message=None,
             )
         ],
@@ -164,9 +164,10 @@ def test_egress_tls_rule_with_message() -> None:
     rule = Rule(
         workload="my-workload",
         name="my-rule",
+        region="eu-west-1",
         type=Rule.EGRESS,
         description="My description",
-        sources=[Source(description="my source", cidr=None, region="eu-west-1")],
+        sources=[Source(description="my source", cidr=None)],
         destinations=[
             Destination(
                 description="my destination",
@@ -174,7 +175,6 @@ def test_egress_tls_rule_with_message() -> None:
                 port=443,
                 cidr=None,
                 endpoint="xebia.com",
-                region=None,
                 message="IMPORTANT BECAUSE ...",
             )
         ],
