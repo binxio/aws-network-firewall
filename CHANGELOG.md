@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2023-07-31)
+
+### Fix
+
+* Tls versions should be an array ([#10](https://github.com/binxio/aws-network-firewall/issues/10)) ([`d107514`](https://github.com/binxio/aws-network-firewall/commit/d1075147296ae4c68e82742b41bd4a0b4b41341f))
+
 ## v0.7.0 (2023-07-31)
 
 ### Feature
