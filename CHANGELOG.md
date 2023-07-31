@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.0 (2023-07-31)
+
+### Feature
+
+* Make tls version configurable per destination ([#9](https://github.com/binxio/aws-network-firewall/issues/9)) ([`bfe2ffa`](https://github.com/binxio/aws-network-firewall/commit/bfe2ffad70026272dc34a2b8f7e780ad0c4de403))
+
 ## v0.6.0 (2023-07-28)
 
 ### Feature
