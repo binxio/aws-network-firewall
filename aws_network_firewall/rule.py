@@ -43,15 +43,15 @@ class Rule:
 
     @staticmethod
     def __resolve_tls_options(
-        destination: Destination, tls_version: Optional[str]
+        destination: Destination, ssl_version: Optional[str]
     ) -> List[SuricataOption]:
         options = [
             SuricataOption(name="tls.sni"),
         ]
-        if tls_version:
+        if ssl_version:
             options.append(
                 SuricataOption(
-                    name="tls.version", value=tls_version, quoted_value=False
+                    name="ssl_version", value=ssl_version, quoted_value=False
                 )
             )
 
@@ -88,30 +88,7 @@ class Rule:
     def __resolve_tls_version_rules(
         self, destination: Destination
     ) -> List[SuricataRule]:
-        rules = []
-
-        for tls_version in destination.tls_versions:
-            rules.append(
-                SuricataRule(
-                    action="pass",
-                    protocol=destination.protocol,
-                    sources=self.__suricata_source,
-                    destination=SuricataHost(
-                        address=destination.cidr if destination.cidr else "",
-                        port=destination.port if destination.port else 0,
-                    ),
-                    options=self.__resolve_tls_options(
-                        destination=destination, tls_version=tls_version
-                    )
-                    + self.__resolve_options(destination=destination),
-                )
-            )
-
-        return rules
-
-    def __resolve_tls_rules(self, destination: Destination) -> List[SuricataRule]:
-        if destination.tls_versions:
-            return self.__resolve_tls_version_rules(destination)
+        ssl_version = ",".join(destination.tls_versions)
 
         return [
             SuricataRule(
@@ -123,11 +100,56 @@ class Rule:
                     port=destination.port if destination.port else 0,
                 ),
                 options=self.__resolve_tls_options(
-                    destination=destination, tls_version=None
+                    destination=destination, ssl_version=ssl_version
                 )
                 + self.__resolve_options(destination=destination),
             )
         ]
+
+    def __resolve_tls_handshake(self, destination: Destination) -> SuricataRule:
+        if not destination.message:
+            destination.message = "Pass non-established TCP for 3-way handshake"
+        else:
+            destination.message += " | Pass non-established TCP for 3-way handshake"
+
+        rule = SuricataRule(
+            action="pass",
+            protocol="TCP",
+            sources=self.__suricata_source,
+            destination=SuricataHost(
+                address=destination.cidr if destination.cidr else "",
+                port=destination.port if destination.port else 0,
+            ),
+            options=[SuricataOption(name="flow", value="not_established")]
+            + self.__resolve_options(destination),
+        )
+
+        return rule
+
+    def __resolve_tls_rules(self, destination: Destination) -> List[SuricataRule]:
+        if destination.tls_versions:
+            return self.__resolve_tls_version_rules(destination)
+
+        rules = [
+            SuricataRule(
+                action="pass",
+                protocol=destination.protocol,
+                sources=self.__suricata_source,
+                destination=SuricataHost(
+                    address=destination.cidr if destination.cidr else "",
+                    port=destination.port if destination.port else 0,
+                ),
+                options=self.__resolve_tls_options(
+                    destination=destination, ssl_version=None
+                )
+                + self.__resolve_options(destination=destination),
+            )
+        ]
+
+        if destination.port != 443:
+            rules.append(self.__resolve_tls_handshake(destination=destination))
+
+        return rules
 
     def __resolve_rule(self, destination: Destination) -> List[SuricataRule]:
         if destination.protocol == "TLS" and destination.endpoint:
