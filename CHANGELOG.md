@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.0 (2023-07-28)
+
+### Feature
+
+* Display rules per region ([#8](https://github.com/binxio/aws-network-firewall/issues/8)) ([`b089566`](https://github.com/binxio/aws-network-firewall/commit/b089566df82603c5c676791732ebddca1ace4cdb))
+
 ## v0.5.0 (2023-07-28)
 
 ### Feature
