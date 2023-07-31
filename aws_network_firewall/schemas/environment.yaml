@@ -115,6 +115,8 @@ definitions:
         type: integer
       Message:
         type: string
+      TLSVersions:
+        enum: [ "1.2", "1.3" ]
     examples:
       - Description: Website of Xebia
         Protocol: TLS

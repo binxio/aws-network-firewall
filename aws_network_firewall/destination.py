@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
 
 @dataclass
@@ -15,3 +15,4 @@ class Destination:
     endpoint: Optional[str]
     cidr: Optional[str]
     message: Optional[str]
+    tls_versions: List[str]
