@@ -35,6 +35,7 @@ def generate_rule(type: str, region: str) -> Rule:
                 cidr=None,
                 endpoint=None,
                 message=None,
+                tls_versions=[],
             )
         ],
     )
@@ -47,6 +48,7 @@ outbound_xebia = Destination(
     cidr=None,
     endpoint="xebia.com",
     message=None,
+    tls_versions=[],
 )
 
 

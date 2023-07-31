@@ -9,6 +9,7 @@ def test_destination_properties() -> None:
         endpoint="xebia.com",
         cidr="10.0.0.0/24",
         message="Important Message",
+        tls_versions=["1.2"],
     )
     assert destination.description == "My Description"
     assert destination.protocol == "TLS"
@@ -16,3 +17,4 @@ def test_destination_properties() -> None:
     assert destination.endpoint == "xebia.com"
     assert destination.cidr == "10.0.0.0/24"
     assert destination.message == "Important Message"
+    assert destination.tls_versions == ["1.2"]

@@ -27,6 +27,7 @@ def destination_resolver(entry: dict) -> Destination:
         endpoint=entry.get("Endpoint"),
         cidr=entry.get("Cidr"),
         message=entry.get("Message"),
+        tls_versions=entry.get("TLSVersions", []),
     )
 
 

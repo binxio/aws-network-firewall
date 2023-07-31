@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 from dataclasses import dataclass
 from typing import List, Optional, ClassVar
 
@@ -41,25 +42,29 @@ class Rule:
         return list(filter(None, map(convert_source, self.sources)))
 
     @staticmethod
-    def __tls_endpoint_options(endpoint: str) -> List[SuricataOption]:
+    def __resolve_tls_options(
+        destination: Destination, tls_version: Optional[str]
+    ) -> List[SuricataOption]:
         options = [
             SuricataOption(name="tls.sni"),
-            SuricataOption(name="tls.version", value="1.2", quoted_value=False),
-            # When using multiple tls versions you need 2 rules
-            # openssl 1.1.1 is needed for tls1.3
-            # SuricataOption(name="tls.version", value="1.3", quoted_value=False),
         ]
+        if tls_version:
+            options.append(
+                SuricataOption(
+                    name="tls.version", value=tls_version, quoted_value=False
+                )
+            )
 
-        if endpoint.startswith("*"):
+        if destination.endpoint.startswith("*"):  # type: ignore
             options += [
                 SuricataOption(name="dotprefix"),
-                SuricataOption(name="content", value=endpoint[1:]),
+                SuricataOption(name="content", value=destination.endpoint[1:]),  # type: ignore
                 SuricataOption(name="nocase"),
                 SuricataOption(name="endswith"),
             ]
         else:
             options += [
-                SuricataOption(name="content", value=endpoint),
+                SuricataOption(name="content", value=destination.endpoint),
                 SuricataOption(name="nocase"),
                 SuricataOption(name="startswith"),
                 SuricataOption(name="endswith"),
@@ -68,39 +73,83 @@ class Rule:
         return options
 
     def __resolve_options(self, destination: Destination) -> List[SuricataOption]:
-        options = []
-
-        if destination.protocol == "TLS" and destination.endpoint:
-            options = self.__tls_endpoint_options(destination.endpoint)
-
         message = (
             f"{destination.message} | {self.workload} | {self.name}"
             if destination.message
             else f"{self.workload} | {self.name}"
         )
 
-        return options + [
+        return [
             SuricataOption(name="msg", value=message),
             SuricataOption(name="rev", value="1", quoted_value=False),
             SuricataOption(name="sid", value="XXX", quoted_value=False),
         ]
 
-    def __resolve_rule(self, destination: Destination) -> SuricataRule:
-        return SuricataRule(
-            action="pass",
-            protocol=destination.protocol,
-            sources=self.__suricata_source,
-            destination=SuricataHost(
-                address=destination.cidr if destination.cidr else "",
-                port=destination.port if destination.port else 0,
-            ),
-            options=self.__resolve_options(destination),
-        )
+    def __resolve_tls_version_rules(
+        self, destination: Destination
+    ) -> List[SuricataRule]:
+        rules = []
+
+        for tls_version in destination.tls_versions:
+            rules.append(
+                SuricataRule(
+                    action="pass",
+                    protocol=destination.protocol,
+                    sources=self.__suricata_source,
+                    destination=SuricataHost(
+                        address=destination.cidr if destination.cidr else "",
+                        port=destination.port if destination.port else 0,
+                    ),
+                    options=self.__resolve_tls_options(
+                        destination=destination, tls_version=tls_version
+                    )
+                    + self.__resolve_options(destination=destination),
+                )
+            )
+
+        return rules
+
+    def __resolve_tls_rules(self, destination: Destination) -> List[SuricataRule]:
+        if destination.tls_versions:
+            return self.__resolve_tls_version_rules(destination)
+
+        return [
+            SuricataRule(
+                action="pass",
+                protocol=destination.protocol,
+                sources=self.__suricata_source,
+                destination=SuricataHost(
+                    address=destination.cidr if destination.cidr else "",
+                    port=destination.port if destination.port else 0,
+                ),
+                options=self.__resolve_tls_options(
+                    destination=destination, tls_version=None
+                )
+                + self.__resolve_options(destination=destination),
+            )
+        ]
+
+    def __resolve_rule(self, destination: Destination) -> List[SuricataRule]:
+        if destination.protocol == "TLS" and destination.endpoint:
+            return self.__resolve_tls_rules(destination=destination)
+
+        return [
+            SuricataRule(
+                action="pass",
+                protocol=destination.protocol,
+                sources=self.__suricata_source,
+                destination=SuricataHost(
+                    address=destination.cidr if destination.cidr else "",
+                    port=destination.port if destination.port else 0,
+                ),
+                options=self.__resolve_options(destination),
+            )
+        ]
 
     @property
     def suricata_rules(self) -> List[SuricataRule]:
         rules = list(filter(None, map(self.__resolve_rule, self.destinations)))
-        return rules
+        return list(itertools.chain.from_iterable(rules))
 
     def __str__(self) -> str:
         return "\n".join(map(str, self.suricata_rules))
