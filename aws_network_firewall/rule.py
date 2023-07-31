@@ -127,9 +127,6 @@ class Rule:
         return rule
 
     def __resolve_tls_rules(self, destination: Destination) -> List[SuricataRule]:
-        if destination.tls_versions:
-            return self.__resolve_tls_version_rules(destination)
-
         rules = [
             SuricataRule(
                 action="pass",
@@ -145,6 +142,9 @@ class Rule:
                 + self.__resolve_options(destination=destination),
             )
         ]
+
+        if destination.tls_versions:
+            rules = self.__resolve_tls_version_rules(destination)
 
         if destination.port != 443:
             rules.append(self.__resolve_tls_handshake(destination=destination))
