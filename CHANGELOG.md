@@ -2,6 +2,18 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2023-07-31)
+
+### Fix
+
+* Tls versions should be an array ([#10](https://github.com/binxio/aws-network-firewall/issues/10)) ([`d107514`](https://github.com/binxio/aws-network-firewall/commit/d1075147296ae4c68e82742b41bd4a0b4b41341f))
+
+## v0.7.0 (2023-07-31)
+
+### Feature
+
+* Make tls version configurable per destination ([#9](https://github.com/binxio/aws-network-firewall/issues/9)) ([`bfe2ffa`](https://github.com/binxio/aws-network-firewall/commit/bfe2ffad70026272dc34a2b8f7e780ad0c4de403))
+
 ## v0.6.0 (2023-07-28)
 
 ### Feature
