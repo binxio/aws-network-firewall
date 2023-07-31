@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.2 (2023-07-31)
+
+### Fix
+
+* Implement handshake rule for non 443 ports with tls requirements ([#11](https://github.com/binxio/aws-network-firewall/issues/11)) ([`d2653e1`](https://github.com/binxio/aws-network-firewall/commit/d2653e1e0f81bf1cdee66076ae89bdede14b6118))
+
 ## v0.7.1 (2023-07-31)
 
 ### Fix
