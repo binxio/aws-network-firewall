@@ -81,8 +81,8 @@ class Rule:
 
         return [
             SuricataOption(name="msg", value=message),
-            SuricataOption(name="rev", value="1", quoted_value=False),
             SuricataOption(name="sid", value="XXX", quoted_value=False),
+            SuricataOption(name="rev", value="1", quoted_value=False),
         ]
 
     def __resolve_tls_version_rules(
