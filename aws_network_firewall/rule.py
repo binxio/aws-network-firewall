@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import itertools
 from dataclasses import dataclass
-from typing import List, Optional, ClassVar
+from typing import List, Optional, ClassVar, Callable, Dict
 
 from aws_network_firewall.source import Source
 from aws_network_firewall.destination import Destination
@@ -153,20 +153,10 @@ class Rule:
         return rules
 
     def __resolve_dns_rules(self, destination: Destination) -> List[SuricataRule]:
-        rules = [
-            SuricataRule(
+        def create_rule(protocol: str) -> SuricataRule:
+            rule = SuricataRule(
                 action="pass",
-                protocol="TCP",
-                sources=self.__suricata_source,
-                destination=SuricataHost(
-                    address=destination.cidr if destination.cidr else "",
-                    port=destination.port if destination.port else 53,
-                ),
-                options=self.__resolve_options(destination=destination),
-            ),
-            SuricataRule(
-                action="pass",
-                protocol="UDP",
+                protocol=protocol,
                 sources=self.__suricata_source,
                 destination=SuricataHost(
                     address=destination.cidr if destination.cidr else "",
@@ -174,20 +164,15 @@ class Rule:
                 ),
                 options=self.__resolve_options(destination=destination),
             )
+            rule.enable_bidirectional_communication()
+            return rule
+
+        return [
+            create_rule(protocol="TCP"),
+            create_rule(protocol="UDP"),
         ]
 
-        for rule in rules:
-            rule.enable_bidirectional_communication()
-
-        return rules
-
-    def __resolve_rule(self, destination: Destination) -> List[SuricataRule]:
-        if destination.protocol == "TLS" and destination.endpoint:
-            return self.__resolve_tls_rules(destination=destination)
-
-        if destination.protocol == "DNS":
-            return self.__resolve_dns_rules(destination=destination)
-
+    def __resolve_rules(self, destination: Destination) -> List[SuricataRule]:
         return [
             SuricataRule(
                 action="pass",
@@ -200,6 +185,15 @@ class Rule:
                 options=self.__resolve_options(destination),
             )
         ]
+
+    def __resolve_rule(self, destination: Destination) -> List[SuricataRule]:
+        mapping: Dict[str, Callable[[Destination], List[SuricataRule]]] = {
+            "TLS": self.__resolve_tls_rules,
+            "DNS": self.__resolve_dns_rules,
+        }
+
+        rule_engine = mapping.get(destination.protocol, self.__resolve_rules)
+        return rule_engine(destination)
 
     @property
     def suricata_rules(self) -> List[SuricataRule]:

@@ -408,7 +408,7 @@ def test_dns_rule() -> None:
     )
 
     assert (
-        'pass tcp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)\n' +
-        'pass udp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)'
+        'pass tcp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)\n'
+        + 'pass udp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)'
         == str(rule)
     )
