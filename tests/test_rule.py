@@ -384,3 +384,31 @@ def test_egress_tls_rule_with_message() -> None:
         'pass tls  any -> any 443 (tls.sni; content:"xebia.com"; nocase; startswith; endswith; msg:"IMPORTANT BECAUSE ... | my-workload | my-rule"; sid:XXX; rev:1;)'
         == str(rule)
     )
+
+
+def test_dns_rule() -> None:
+    rule = Rule(
+        workload="my-workload",
+        name="my-rule",
+        region="eu-west-1",
+        type=Rule.INSPECTION,
+        description="My description",
+        sources=[Source(description="my source", cidr="10.0.0.10/32")],
+        destinations=[
+            Destination(
+                description="my destination",
+                protocol="DNS",
+                port=None,
+                cidr="192.168.0.10/32",
+                endpoint="",
+                message="",
+                tls_versions=[],
+            )
+        ],
+    )
+
+    assert (
+        'pass tcp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)\n' +
+        'pass udp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)'
+        == str(rule)
+    )

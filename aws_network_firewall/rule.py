@@ -123,6 +123,7 @@ class Rule:
             options=[SuricataOption(name="flow", value="not_established")]
             + self.__resolve_options(destination),
         )
+        rule.enable_bidirectional_communication()
 
         return rule
 
@@ -151,9 +152,41 @@ class Rule:
 
         return rules
 
+    def __resolve_dns_rules(self, destination: Destination) -> List[SuricataRule]:
+        rules = [
+            SuricataRule(
+                action="pass",
+                protocol="TCP",
+                sources=self.__suricata_source,
+                destination=SuricataHost(
+                    address=destination.cidr if destination.cidr else "",
+                    port=destination.port if destination.port else 53,
+                ),
+                options=self.__resolve_options(destination=destination),
+            ),
+            SuricataRule(
+                action="pass",
+                protocol="UDP",
+                sources=self.__suricata_source,
+                destination=SuricataHost(
+                    address=destination.cidr if destination.cidr else "",
+                    port=destination.port if destination.port else 53,
+                ),
+                options=self.__resolve_options(destination=destination),
+            )
+        ]
+
+        for rule in rules:
+            rule.enable_bidirectional_communication()
+
+        return rules
+
     def __resolve_rule(self, destination: Destination) -> List[SuricataRule]:
         if destination.protocol == "TLS" and destination.endpoint:
             return self.__resolve_tls_rules(destination=destination)
+
+        if destination.protocol == "DNS":
+            return self.__resolve_dns_rules(destination=destination)
 
         return [
             SuricataRule(
