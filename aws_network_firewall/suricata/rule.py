@@ -19,22 +19,18 @@ class Rule:
     destination: Host
     options: List[Option]
 
+    __bidirectional: bool = False
+
     def __post_init__(self):
         self.protocol = self.protocol.lower()
+        self.__bidirectional = True if self.protocol == "icmp" else False
+
+    def enable_bidirectional_communication(self) -> None:
+        self.__bidirectional = True
 
     @property
     def direction(self) -> str:
-        message = next(
-            filter(lambda option: option.name == "msg", self.options),
-            Option(name="msg"),
-        )
-        if (
-            "Pass non-established TCP for 3-way handshake" in str(message.value)
-            or self.protocol == "icmp"
-        ):
-            return "<>"
-
-        return "->"
+        return "<>" if self.__bidirectional else "->"
 
     @property
     def source(self) -> str:

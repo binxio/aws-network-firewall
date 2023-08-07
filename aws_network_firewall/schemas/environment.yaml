@@ -110,7 +110,7 @@ definitions:
       Region:
         type: string
       Protocol:
-        enum: [ "TCP", "TLS", "ICMP" ]
+        enum: [ "TCP", "TLS", "ICMP", "DNS" ]
       Port:
         type: integer
       Message:
