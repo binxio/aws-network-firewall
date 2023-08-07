@@ -412,3 +412,30 @@ def test_dns_rule() -> None:
         + 'pass udp 10.0.0.10/32 any <> 192.168.0.10/32 53 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)'
         == str(rule)
     )
+
+
+def test_prefix_list_rule() -> None:
+    rule = Rule(
+        workload="my-workload",
+        name="my-rule",
+        region="eu-west-1",
+        type=Rule.EGRESS,
+        description="My description",
+        sources=[Source(description="my source", cidr="10.0.0.10/32")],
+        destinations=[
+            Destination(
+                description="my destination",
+                protocol="TCP",
+                port=443,
+                cidr=None,
+                endpoint="@S3PrefixList",
+                message="",
+                tls_versions=[],
+            )
+        ],
+    )
+
+    assert (
+        'pass tcp 10.0.0.10/32 any -> @S3PrefixList 443 (msg:"my-workload | my-rule"; sid:XXX; rev:1;)'
+        == str(rule)
+    )

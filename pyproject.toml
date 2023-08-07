@@ -50,7 +50,8 @@ source = ["aws_network_firewall"]
 show_missing = true
 fail_under = 98
 exclude_lines = [
-    "if __name__ == .__main__.:"
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError"
 ]
 
 [build-system]
