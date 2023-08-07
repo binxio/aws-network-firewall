@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.3 (2023-08-07)
+
+### Fix
+
+* Restore the initial order of sid and rev ([#13](https://github.com/binxio/aws-network-firewall/issues/13)) ([`753705c`](https://github.com/binxio/aws-network-firewall/commit/753705c5f233ff3a064f7d9fb26b4eef0b897838))
+
 ## v0.7.2 (2023-07-31)
 
 ### Fix
