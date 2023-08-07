@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2023-08-07)
+
+### Feature
+
+* Generate rules for dns servers ([#14](https://github.com/binxio/aws-network-firewall/issues/14)) ([`c7ab409`](https://github.com/binxio/aws-network-firewall/commit/c7ab4090523be52f2d06a673c7d9525e762d0751))
+
 ## v0.7.3 (2023-08-07)
 
 ### Fix
