@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.0 (2023-08-08)
+
+### Feature
+
+* Support aws prefix lists in suricata rules ([#15](https://github.com/binxio/aws-network-firewall/issues/15)) ([`ad55566`](https://github.com/binxio/aws-network-firewall/commit/ad555668c1cf277121bb9a6d2ddc7f86f98293a8))
+
 ## v0.8.0 (2023-08-07)
 
 ### Feature
