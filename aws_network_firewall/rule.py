@@ -2,11 +2,17 @@ from __future__ import annotations
 
 import itertools
 from dataclasses import dataclass
-from typing import List, Optional, ClassVar, Callable, Dict
+from typing import List, Optional, ClassVar, Dict
 
+from aws_network_firewall.engines.abstract import EngineAbstract
+from aws_network_firewall.engines.dns_rule import DnsRule
+from aws_network_firewall.engines.icmp_rule import IcmpRule
+from aws_network_firewall.engines.prefix_list import PrefixList
+from aws_network_firewall.engines.default_rule import DefaultRule
+from aws_network_firewall.engines.tls_rule import TlsRule
 from aws_network_firewall.source import Source
 from aws_network_firewall.destination import Destination
-from aws_network_firewall.suricata import SuricataRule, SuricataHost, SuricataOption
+from aws_network_firewall.suricata import SuricataRule, SuricataHost
 
 
 @dataclass
@@ -41,159 +47,17 @@ class Rule:
 
         return list(filter(None, map(convert_source, self.sources)))
 
-    @staticmethod
-    def __resolve_tls_options(
-        destination: Destination, ssl_version: Optional[str]
-    ) -> List[SuricataOption]:
-        options = [
-            SuricataOption(name="tls.sni"),
-        ]
-        if ssl_version:
-            options.append(
-                SuricataOption(
-                    name="ssl_version", value=ssl_version, quoted_value=False
-                )
-            )
-
-        if destination.endpoint.startswith("*"):  # type: ignore
-            options += [
-                SuricataOption(name="dotprefix"),
-                SuricataOption(name="content", value=destination.endpoint[1:]),  # type: ignore
-                SuricataOption(name="nocase"),
-                SuricataOption(name="endswith"),
-            ]
-        else:
-            options += [
-                SuricataOption(name="content", value=destination.endpoint),
-                SuricataOption(name="nocase"),
-                SuricataOption(name="startswith"),
-                SuricataOption(name="endswith"),
-            ]
-
-        return options
-
-    def __resolve_options(self, destination: Destination) -> List[SuricataOption]:
-        message = (
-            f"{destination.message} | {self.workload} | {self.name}"
-            if destination.message
-            else f"{self.workload} | {self.name}"
-        )
-
-        return [
-            SuricataOption(name="msg", value=message),
-            SuricataOption(name="sid", value="XXX", quoted_value=False),
-            SuricataOption(name="rev", value="1", quoted_value=False),
-        ]
-
-    def __resolve_tls_version_rules(
-        self, destination: Destination
-    ) -> List[SuricataRule]:
-        ssl_version = ",".join(destination.tls_versions)
-
-        return [
-            SuricataRule(
-                action="pass",
-                protocol=destination.protocol,
-                sources=self.__suricata_source,
-                destination=SuricataHost(
-                    address=destination.cidr if destination.cidr else "",
-                    port=destination.port if destination.port else 0,
-                ),
-                options=self.__resolve_tls_options(
-                    destination=destination, ssl_version=ssl_version
-                )
-                + self.__resolve_options(destination=destination),
-            )
-        ]
-
-    def __resolve_tls_handshake(self, destination: Destination) -> SuricataRule:
-        if not destination.message:
-            destination.message = "Pass non-established TCP for 3-way handshake"
-        else:
-            destination.message += " | Pass non-established TCP for 3-way handshake"
-
-        rule = SuricataRule(
-            action="pass",
-            protocol="TCP",
-            sources=self.__suricata_source,
-            destination=SuricataHost(
-                address=destination.cidr if destination.cidr else "",
-                port=destination.port if destination.port else 0,
-            ),
-            options=[SuricataOption(name="flow", value="not_established")]
-            + self.__resolve_options(destination),
-        )
-        rule.enable_bidirectional_communication()
-
-        return rule
-
-    def __resolve_tls_rules(self, destination: Destination) -> List[SuricataRule]:
-        rules = [
-            SuricataRule(
-                action="pass",
-                protocol=destination.protocol,
-                sources=self.__suricata_source,
-                destination=SuricataHost(
-                    address=destination.cidr if destination.cidr else "",
-                    port=destination.port if destination.port else 0,
-                ),
-                options=self.__resolve_tls_options(
-                    destination=destination, ssl_version=None
-                )
-                + self.__resolve_options(destination=destination),
-            )
-        ]
-
-        if destination.tls_versions:
-            rules = self.__resolve_tls_version_rules(destination)
-
-        if destination.port != 443:
-            rules.append(self.__resolve_tls_handshake(destination=destination))
-
-        return rules
-
-    def __resolve_dns_rules(self, destination: Destination) -> List[SuricataRule]:
-        def create_rule(protocol: str) -> SuricataRule:
-            rule = SuricataRule(
-                action="pass",
-                protocol=protocol,
-                sources=self.__suricata_source,
-                destination=SuricataHost(
-                    address=destination.cidr if destination.cidr else "",
-                    port=destination.port if destination.port else 53,
-                ),
-                options=self.__resolve_options(destination=destination),
-            )
-            rule.enable_bidirectional_communication()
-            return rule
-
-        return [
-            create_rule(protocol="TCP"),
-            create_rule(protocol="UDP"),
-        ]
-
-    def __resolve_rules(self, destination: Destination) -> List[SuricataRule]:
-        return [
-            SuricataRule(
-                action="pass",
-                protocol=destination.protocol,
-                sources=self.__suricata_source,
-                destination=SuricataHost(
-                    address=destination.cidr if destination.cidr else "",
-                    port=destination.port if destination.port else 0,
-                ),
-                options=self.__resolve_options(destination),
-            )
-        ]
-
     def __resolve_rule(self, destination: Destination) -> List[SuricataRule]:
-        mapping: Dict[str, Callable[[Destination], List[SuricataRule]]] = {
-            "TLS": self.__resolve_tls_rules,
-            "DNS": self.__resolve_dns_rules,
+        pre_mapping = {
+            Destination.ICMP_RULE: IcmpRule,
+            Destination.TLS_RULE: TlsRule,
+            Destination.DNS_RULE: DnsRule,
+            Destination.PREFIX_LIST: PrefixList,
         }
-
-        rule_engine = mapping.get(destination.protocol, self.__resolve_rules)
-        return rule_engine(destination)
+        engine = pre_mapping.get(destination.type, DefaultRule)
+        return engine(  # type: ignore
+            sources=self.__suricata_source, name=self.name, workload=self.workload
+        ).parse(destination=destination)
 
     @property
     def suricata_rules(self) -> List[SuricataRule]:
