@@ -63,5 +63,6 @@ def environment_resolver(path: str) -> Account:
         name=data["Name"],
         account_id=data["AccountId"],
         cidr_ranges=cidr_ranges_resolver(data.get("CidrRanges", {})),
+        sid_range=data.get("SidRange", ""),
         rules=list(map(internal_resolver, data.get("Rules", []))),
     )

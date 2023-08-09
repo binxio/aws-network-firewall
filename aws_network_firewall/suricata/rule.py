@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
 
 from aws_network_firewall.suricata.host import Host
 from aws_network_firewall.suricata.option import Option

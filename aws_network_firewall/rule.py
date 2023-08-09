@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import itertools
 from dataclasses import dataclass
-from typing import List, Optional, ClassVar, Dict
+from typing import List, Optional, ClassVar
 
-from aws_network_firewall.engines.abstract import EngineAbstract
 from aws_network_firewall.engines.dns_rule import DnsRule
 from aws_network_firewall.engines.icmp_rule import IcmpRule
 from aws_network_firewall.engines.prefix_list import PrefixList
 from aws_network_firewall.engines.default_rule import DefaultRule
 from aws_network_firewall.engines.tls_rule import TlsRule
+from aws_network_firewall.sid_state import SidState
 from aws_network_firewall.source import Source
 from aws_network_firewall.destination import Destination
 from aws_network_firewall.suricata import SuricataRule, SuricataHost
@@ -32,6 +32,11 @@ class Rule:
     INSPECTION: ClassVar[str] = "Inspection"
     EGRESS: ClassVar[str] = "Egress"
 
+    __sid_state: Optional[SidState] = None
+
+    def register_sid_state(self, sid_state: SidState) -> None:
+        self.__sid_state = sid_state
+
     @property
     def is_inspection_rule(self) -> bool:
         return self.type == self.INSPECTION
@@ -41,7 +46,7 @@ class Rule:
         return self.type == self.EGRESS
 
     @property
-    def __suricata_source(self) -> List[SuricataHost]:
+    def suricata_source(self) -> List[SuricataHost]:
         def convert_source(source: Source) -> Optional[SuricataHost]:
             return SuricataHost(address=source.cidr, port=0) if source.cidr else None
 
@@ -55,9 +60,9 @@ class Rule:
             Destination.PREFIX_LIST: PrefixList,
         }
         engine = pre_mapping.get(destination.type, DefaultRule)
-        return engine(  # type: ignore
-            sources=self.__suricata_source, name=self.name, workload=self.workload
-        ).parse(destination=destination)
+        return engine(rule=self, sid_state=self.__sid_state).parse(  # type: ignore
+            destination=destination
+        )
 
     @property
     def suricata_rules(self) -> List[SuricataRule]:

@@ -8,7 +8,21 @@ from aws_network_firewall.suricata.host import Host
 
 class TlsRule(EngineAbstract):
     def parse(self, destination: Destination) -> List[SuricataRule]:
-        rules = [
+        rules = []
+
+        if not destination.tls_versions:
+            rules = self.__resolve_rules(destination)
+
+        if destination.tls_versions:
+            rules = self.__resolve_tls_version_rules(destination)
+
+        if destination.port != 443:
+            rules.append(self.__resolve_tls_handshake(destination=destination))
+
+        return rules
+
+    def __resolve_rules(self, destination) -> List[SuricataRule]:
+        return [
             SuricataRule(
                 action="pass",
                 protocol=destination.protocol,
@@ -23,14 +37,6 @@ class TlsRule(EngineAbstract):
                 + self.resolve_options(destination=destination),
             )
         ]
-
-        if destination.tls_versions:
-            rules = self.__resolve_tls_version_rules(destination)
-
-        if destination.port != 443:
-            rules.append(self.__resolve_tls_handshake(destination=destination))
-
-        return rules
 
     @staticmethod
     def __resolve_tls_options(
