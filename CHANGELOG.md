@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.0 (2023-08-09)
+
+### Feature
+
+* Calculate the used sid per type and region ([#17](https://github.com/binxio/aws-network-firewall/issues/17)) ([`5e3d5b3`](https://github.com/binxio/aws-network-firewall/commit/5e3d5b39fee2d28c1edc5de31419271e8edf7a33))
+
 ## v0.9.0 (2023-08-08)
 
 ### Feature
