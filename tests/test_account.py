@@ -15,6 +15,7 @@ def generate_account(rules: List[Rule]) -> Account:
         cidr_ranges=CidrRanges(
             cidr_ranges=[CidrRange(region="eu-west-1", value="10.0.0.0/8")]
         ),
+        sid_range="",
         rules=rules,
     )
 
@@ -68,6 +69,7 @@ def test_inspection_rules() -> None:
         cidr_ranges=CidrRanges(
             cidr_ranges=[CidrRange(region="eu-west-1", value="10.0.0.0/8")]
         ),
+        sid_range="",
         rules=rules,
     )
     assert len(account.rules) == 1

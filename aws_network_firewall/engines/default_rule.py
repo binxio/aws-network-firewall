@@ -3,7 +3,6 @@ from typing import List
 from aws_network_firewall.destination import Destination
 from aws_network_firewall.engines.abstract import EngineAbstract
 from aws_network_firewall.suricata import SuricataRule, SuricataHost
-from aws_network_firewall.suricata.host import Host
 
 
 class DefaultRule(EngineAbstract):

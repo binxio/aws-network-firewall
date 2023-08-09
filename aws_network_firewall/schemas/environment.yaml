@@ -29,6 +29,9 @@ properties:
         type: string
       us-east-2:
         type: string
+  SidRange:
+    type: string
+    pattern: "^[0-9]+-[0-9]+$"
   Rules:
     type: array
     items:

@@ -50,7 +50,7 @@ xebia.com | None | TLS  | 443 | My destination
 Based on the above defined sources and destination the following firewall rules are required:
 
 ```
-pass tls 192.168.0.0/21 any -> any 443 (tls.sni; content:"xebia.com"; nocase; startswith; endswith; msg:"binxio-example-workload-development | My Rule name"; sid:XXX; rev:1;)
+pass tls 192.168.0.0/21 any -> any 443 (tls.sni; content:"xebia.com"; nocase; startswith; endswith; msg:"binxio-example-workload-development | My Rule name"; sid:0; rev:1;)
 
 ```
 
