@@ -52,20 +52,21 @@ class TlsRule(EngineAbstract):
                 )
             )
 
-        if destination.endpoint.startswith("*"):  # type: ignore
-            options += [
-                SuricataOption(name="dotprefix"),
-                SuricataOption(name="content", value=destination.endpoint[1:]),  # type: ignore
-                SuricataOption(name="nocase"),
-                SuricataOption(name="endswith"),
-            ]
-        else:
-            options += [
-                SuricataOption(name="content", value=destination.endpoint),
-                SuricataOption(name="nocase"),
-                SuricataOption(name="startswith"),
-                SuricataOption(name="endswith"),
-            ]
+        if destination.endpoint:
+            if destination.endpoint.startswith("*"):  # type: ignore
+                options += [
+                    SuricataOption(name="dotprefix"),
+                    SuricataOption(name="content", value=destination.endpoint[1:]),  # type: ignore
+                    SuricataOption(name="nocase"),
+                    SuricataOption(name="endswith"),
+                ]
+            else:
+                options += [
+                    SuricataOption(name="content", value=destination.endpoint),
+                    SuricataOption(name="nocase"),
+                    SuricataOption(name="startswith"),
+                    SuricataOption(name="endswith"),
+                ]
 
         return options
 
