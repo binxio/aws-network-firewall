@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.1 (2023-09-07)
+
+### Fix
+
+* Tls rules without endpoints ([#23](https://github.com/binxio/aws-network-firewall/issues/23)) ([`9e5dfa7`](https://github.com/binxio/aws-network-firewall/commit/9e5dfa7a6f4f47dfcebd129a1124ef3e5c921538))
+
 ## v0.10.0 (2023-08-09)
 
 ### Feature
