@@ -38,9 +38,9 @@ class TlsRule(EngineAbstract):
             )
         ]
 
-    @staticmethod
+    @classmethod
     def __resolve_tls_options(
-        destination: Destination, ssl_version: Optional[str]
+        cls, destination: Destination, ssl_version: Optional[str]
     ) -> List[SuricataOption]:
         options = [
             SuricataOption(name="tls.sni"),
@@ -52,22 +52,27 @@ class TlsRule(EngineAbstract):
                 )
             )
 
-        if destination.endpoint.startswith("*"):  # type: ignore
-            options += [
+        if destination.endpoint:
+            options += cls.__resolve_sni_options(destination.endpoint)
+
+        return options
+
+    @staticmethod
+    def __resolve_sni_options(endpoint: str) -> List[SuricataOption]:
+        if endpoint.startswith("*"):
+            return [
                 SuricataOption(name="dotprefix"),
-                SuricataOption(name="content", value=destination.endpoint[1:]),  # type: ignore
+                SuricataOption(name="content", value=endpoint[1:]),
                 SuricataOption(name="nocase"),
-                SuricataOption(name="endswith"),
-            ]
-        else:
-            options += [
-                SuricataOption(name="content", value=destination.endpoint),
-                SuricataOption(name="nocase"),
-                SuricataOption(name="startswith"),
                 SuricataOption(name="endswith"),
             ]
 
-        return options
+        return [
+            SuricataOption(name="content", value=endpoint),
+            SuricataOption(name="nocase"),
+            SuricataOption(name="startswith"),
+            SuricataOption(name="endswith"),
+        ]
 
     def __resolve_tls_version_rules(
         self, destination: Destination

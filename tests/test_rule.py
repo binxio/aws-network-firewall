@@ -483,3 +483,30 @@ def test_no_sid_state() -> None:
         'pass tcp 10.0.0.10/32 any -> @S3PrefixList 443 (msg:"my-workload | my-rule"; sid:0; rev:1;)'
         == str(rule)
     )
+
+
+def test_tls_no_endpoint() -> None:
+    rule = Rule(
+        workload="my-workload",
+        name="my-rule",
+        region="eu-west-1",
+        type=Rule.INSPECTION,
+        description="My description",
+        sources=[Source(description="my source", cidr="10.0.0.10/32")],
+        destinations=[
+            Destination(
+                description="my destination",
+                protocol="TLS",
+                port=443,
+                endpoint=None,
+                cidr="192.168.0.1/32",
+                message="",
+                tls_versions=["tls1.2", "tls1.3"],
+            )
+        ],
+    )
+
+    assert (
+        'pass tls 10.0.0.10/32 any -> 192.168.0.1/32 443 (tls.sni; ssl_version:tls1.2,tls1.3; msg:"my-workload | my-rule"; sid:0; rev:1;)'
+        == str(rule)
+    )
