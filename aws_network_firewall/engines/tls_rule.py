@@ -109,7 +109,9 @@ class TlsRule(EngineAbstract):
                 address=destination.cidr if destination.cidr else "",
                 port=destination.port if destination.port else 0,
             ),
-            options=[SuricataOption(name="flow", value="not_established")]
+            options=[
+                SuricataOption(name="flow", value="not_established", quoted_value=False)
+            ]
             + self.resolve_options(destination),
         )
         rule.enable_bidirectional_communication()
