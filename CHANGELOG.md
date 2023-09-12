@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.2 (2023-09-12)
+
+### Fix
+
+* Flow value should not be quoted ([#24](https://github.com/binxio/aws-network-firewall/issues/24)) ([`0cc418d`](https://github.com/binxio/aws-network-firewall/commit/0cc418d16327a0e7c9ea361809dab6b97921afb4))
+
 ## v0.10.1 (2023-09-07)
 
 ### Fix
