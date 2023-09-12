@@ -168,7 +168,7 @@ def test_rule_with_tls_endpoint_non_standard_port() -> None:
 
     assert (
         'pass tls 10.0.0.0/24 any -> 10.0.1.0/24 444 (tls.sni; content:"xebia.com"; nocase; startswith; endswith; msg:"my-workload | my-rule"; sid:100; rev:1;)\n'
-        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:"not_established"; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:101; rev:1;)'
+        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:not_established; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:101; rev:1;)'
         == str(rule)
     )
 
@@ -197,7 +197,7 @@ def test_rule_with_tls_endpoint_non_standard_port_and_message() -> None:
 
     assert (
         'pass tls 10.0.0.0/24 any -> 10.0.1.0/24 444 (tls.sni; content:"xebia.com"; nocase; startswith; endswith; msg:"IMPORTANT | my-workload | my-rule"; sid:200; rev:1;)\n'
-        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:"not_established"; msg:"IMPORTANT | Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
+        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:not_established; msg:"IMPORTANT | Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
         == str(rule)
     )
 
@@ -225,7 +225,7 @@ def test_rule_with_tls_endpoint_non_standard_port_and_tls_1_2_version() -> None:
     rule.register_sid_state(SidState("200-205"))
     assert (
         'pass tls 10.0.0.0/24 any -> 10.0.1.0/24 444 (tls.sni; ssl_version:tls1.2; content:"xebia.com"; nocase; startswith; endswith; msg:"my-workload | my-rule"; sid:200; rev:1;)\n'
-        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:"not_established"; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
+        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:not_established; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
         == str(rule)
     )
 
@@ -254,7 +254,7 @@ def test_rule_with_tls_endpoint_non_standard_port_and_tls_1_3_version() -> None:
 
     assert (
         'pass tls 10.0.0.0/24 any -> 10.0.1.0/24 444 (tls.sni; ssl_version:tls1.3; content:"xebia.com"; nocase; startswith; endswith; msg:"my-workload | my-rule"; sid:200; rev:1;)\n'
-        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:"not_established"; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
+        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:not_established; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
         == str(rule)
     )
 
@@ -284,7 +284,7 @@ def test_rule_with_tls_endpoint_non_standard_port_and_tls_1_2_and_1_3_version() 
 
     assert (
         'pass tls 10.0.0.0/24 any -> 10.0.1.0/24 444 (tls.sni; ssl_version:tls1.2,tls1.3; content:"xebia.com"; nocase; startswith; endswith; msg:"my-workload | my-rule"; sid:200; rev:1;)\n'
-        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:"not_established"; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
+        + 'pass tcp 10.0.0.0/24 any <> 10.0.1.0/24 444 (flow:not_established; msg:"Pass non-established TCP for 3-way handshake | my-workload | my-rule"; sid:201; rev:1;)'
         == str(rule)
     )
 
