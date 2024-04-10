@@ -424,13 +424,13 @@ referencing = ">=0.28.0"
 
 [[package]]
 name = "jsonschema2md"
-version = "1.0.0"
+version = "1.1.0"
 description = "Convert JSON Schema to human-readable Markdown documentation"
 optional = false
-python-versions = ">=3.9,<4.0"
+python-versions = ">=3.9"
 files = [
-    {file = "jsonschema2md-1.0.0-py3-none-any.whl", hash = "sha256:1d1333cb6d55a152ce10051b05651bc71122c0ec5e572b3433046825661569d4"},
-    {file = "jsonschema2md-1.0.0.tar.gz", hash = "sha256:01e18693c8dcdd643aa79ce757c5896877c590493422d23fd0bd76562fbc424b"},
+    {file = "jsonschema2md-1.1.0-py3-none-any.whl", hash = "sha256:e89edf2de1bc7fc3e842915c7c29b7b70888555a87002eccc06350c0412a1458"},
+    {file = "jsonschema2md-1.1.0.tar.gz", hash = "sha256:2386fc4d119330686db3989ea497ab96a4defb6388386fc0ceff756b5c1a66a7"},
 ]
 
 [package.dependencies]
@@ -1016,4 +1016,4 @@ requests = ">=2.0,<3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "4838945bcc0be3df0ed8241c0becea55b336be859a18dec94c9236e9b2dc2502"
+content-hash = "cad25638ba86a55e14c4a0111013ce70615d37fa04fff4c1d9454fde547a5f8f"
